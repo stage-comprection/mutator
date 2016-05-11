@@ -11,6 +11,8 @@ class Readator {
         std::ofstream outputFile;
         std::ofstream outputFile_noError;
 
+        std::mt19937 gen;
+
         uint readSize;
         uint coverage;
 
@@ -19,7 +21,7 @@ class Readator {
 
         Mutator mutator;
 
-        Readator(std::string rf, std::string of, uint s, uint c, float mu) : mutator(mu) {
+        Readator(std::string rf, std::string of, uint s, uint c, float mu) : gen((std::random_device())()), mutator(mu) {
 
             referenceFile.open(rf);
             outputFile.open(of);

@@ -8,6 +8,7 @@
 #include <algorithm>
 
 
+
 class Mutator {
 
     public:
@@ -15,11 +16,13 @@ class Mutator {
         float mu;
         std::mt19937 gen;
 
+        std::ofstream logsFile;
+
         const char bases[4] {'A', 'C', 'G', 'T'};
         std::uniform_int_distribution<> baseDistribution;
 
-        Mutator(float m): gen((std::random_device())()), baseDistribution(0,3) { mu = m; }
+        Mutator(float m): gen((std::random_device())()), baseDistribution(0,3) { mu = m; logsFile.open("mutator.log"); }
 
-        std::string mutate(std::string);
+        std::string mutate(std::string& seq);
 
 };

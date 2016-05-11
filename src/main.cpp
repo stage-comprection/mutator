@@ -8,6 +8,9 @@ int main(int argc, char *argv[]) {
         return -1;
     }
 
+    std::cout << "Starting Mutator" << std::endl;
+    std::cout << "Processing arguments";
+
     std::string rf = argv[1];
     std::string of = argv[2];
     float mu = std::stof(argv[3]);
@@ -26,9 +29,18 @@ int main(int argc, char *argv[]) {
     }
 
 
+    std::cout << " --> OK" << std::endl;
+    std::cout << "Creating Readator Object";
+
     Readator readator(rf, of, s, c, mu);
 
+    std::cout << " --> OK" << std::endl;
+    std::cout << "Reading contigs file";
+
     readator.fillContigs();
+
+    std::cout << " --> OK" << std::endl;
+    std::cout << "Creating reads" << std::endl;
 
 //    for (uint i=0; i<readator.contigs.size(); ++i) std::cout<<readator.contigs[i] << "\n";
 
