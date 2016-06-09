@@ -35,5 +35,6 @@ clean:
 
 init: 
 	mkdir -p $(BUILD) $(BUILD)
+	mkdir -p $(BIN) $(BIN)
 
 rebuild: clean $(TARGET)
