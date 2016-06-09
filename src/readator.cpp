@@ -16,12 +16,34 @@ void Readator::fillContigs() {
 }
 
 
+
+void Readator::mutate(std::string& r) {
+
+    char b;
+
+    for (uint i=0; i<r.size(); ++i){
+
+        if (this->errorDistribution(this->gen) == 0){
+
+            do {
+
+                b = this->bases[this->baseDistribution(this->gen)];
+
+            } while(b == r.at(i));
+
+            r.at(i) = b;
+        }
+    }
+
+}
+
+
+
 void Readator::readate() {
 
     std::cout << " - Initializing random device" << std::endl;
 
     uint s = this->readSize;
-    std::string mutatedContig;
 
     std::cout << " - Looping through contigs (total : " << contigs.size() << ")" << std::endl;
 
@@ -32,37 +54,31 @@ void Readator::readate() {
         std::cout << "      + Size = " << n << std::endl;
         std::cout << "      + Generating reads" << std::endl;
 
-        for (uint j=0; j<this->coverage; ++j){
+        if (this->readSize == 0) {
 
-            mutatedContig = this->mutator.mutate(contigs[i]);
+            s = n;
+        }
 
-            if (this->readSize == 0) {
+        uint nReads =  (uint) this->coverage * n / s ; // number of reads = coverage * ref size / read size
 
-                s = n;
-            }
+        std::uniform_int_distribution<> readDistribution(0, n - s);
 
-            uint nReads =  (uint) n / s ;
+        uint startPos = 0;
+        std::string read;
 
-            std::uniform_int_distribution<> readDistribution(0, n - s);
+        for (uint j=0; j<nReads; j++) {
 
-            uint startPos = 0;
-            std::string read, mutatedRead;
+            startPos = readDistribution(this->gen);
 
-            for (uint j=0; j<nReads; j++) {
+            read = this->contigs[i].substr(startPos, s);
 
-                startPos = readDistribution(this->gen);
+            this->outputFile_noError << ">" << this->readCounter << "\n" << read << "\n";
 
-                read = this->contigs[i].substr(startPos, s);
+            this->mutate(read);
 
-                mutatedRead = mutatedContig.substr(startPos, s);
+            this->outputFile << ">" << this->readCounter << "\n" << read << "\n";
 
-                this->outputFile << ">" << this->readCounter << "\n" << mutatedRead << "\n";
-
-                this->outputFile_noError << ">" << this->readCounter << "\n" << read << "\n";
-
-                ++this->readCounter;
-            }
-
+            ++this->readCounter;
 
         }
 
